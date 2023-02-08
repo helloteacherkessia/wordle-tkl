@@ -1,0 +1,1 @@
+window.word = 'teste'
