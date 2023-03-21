@@ -4,10 +4,12 @@ const DANCE_ANIMATION_DURATION = 500
 const keyboard = document.querySelector("[data-keyboard]")
 const alertContainer = document.querySelector("[data-alert-container]")
 const guessGrid = document.querySelector("[data-guess-grid]")
-const offsetFromDate = new Date(2022, 0, 1)
+const offsetFromDate = new Date(2023, 2, 21)
 const msOffset = Date.now() - offsetFromDate
-const dayOffset = msOffset / 1000 / 60 / 60 / 24
-let targetWord = window.word || targetWords[Math.floor(dayOffset)]
+const dayOffset = msOffset / 1000 / 60 / 60 / 24;
+const day = Math.floor(dayOffset) + 1;
+let targetWord = targetWords[day - 1]
+const guessEmoji = [];
 startInteraction()
 
 function startInteraction() {
@@ -123,8 +125,10 @@ function submitGuess() {
     return
   }
 
+  guessEmoji.push([])
   stopInteraction()
   activeTiles.forEach((...params) => flipTile(...params, guess))
+  console.log(guessEmoji)
 }
 
 function flipTile(tile, index, array, guess) {
@@ -139,12 +143,15 @@ function flipTile(tile, index, array, guess) {
     () => {
       tile.classList.remove("flip")
       if (targetWord[index] === letter) {
+        guessEmoji[guessEmoji.length -1].push('🟩')
         tile.dataset.state = "correct"
         key.classList.add("correct")
       } else if (targetWord.includes(letter)) {
+        guessEmoji[guessEmoji.length -1].push('🟨')
         tile.dataset.state = "wrong-location"
         key.classList.add("wrong-location")
       } else {
+        guessEmoji[guessEmoji.length -1].push('⬛')
         tile.dataset.state = "wrong"
         key.classList.add("wrong")
       }
@@ -168,11 +175,33 @@ function getActiveTiles() {
   return guessGrid.querySelectorAll('[data-state="active"]')
 }
 
-function showAlert(message, duration = 1000) {
+function shareResults() {
+  console.log({
+    title: `Wordle TKL | Day ${day}`,
+    text: `Wordle TKL | \n\n${guessEmoji.map(line => line.join('')).join('\n')}`,
+    url: window.location.origin,
+  });
+
+  navigator.share({
+    title: `Wordle TKL | Day ${day}`,
+    text: `Wordle TKL | \n\n${guessEmoji.map(line => line.join('')).join('\n')}`,
+    url: window.location.origin,
+  })
+}
+
+function showAlert(message, duration = 1000, share = false) {
   const alert = document.createElement("div")
   alert.textContent = message
   alert.classList.add("alert")
   alertContainer.prepend(alert)
+
+  if(share) {
+      const shareButton = document.createElement("button");
+      shareButton.innerText = "Share 🔗" 
+      shareButton.addEventListener('click', shareResults);
+      alert.append(shareButton);
+  }
+
   if (duration == null) return
 
   setTimeout(() => {
@@ -198,7 +227,7 @@ function shakeTiles(tiles) {
 
 function checkWinLose(guess, tiles) {
   if (guess === targetWord) {
-    showAlert("You Win", 5000)
+    showAlert("You Win", null, true)
     danceTiles(tiles)
     stopInteraction()
     return

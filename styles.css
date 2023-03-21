@@ -196,7 +196,8 @@ body {
 }
 
 .alert {
-  pointer-events: none;
+  display: flex;
+  flex-direction: column;
   background-color: #eca7ac;
   padding: .75em;
   border-radius: .25em;
