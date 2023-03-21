@@ -176,17 +176,13 @@ function getActiveTiles() {
 }
 
 function shareResults() {
-  console.log({
+  const sharePayload = {
     title: `Wordle TKL`,
     text: `Wordle TKL |  Day ${day} | \n\n${guessEmoji.map(line => line.join('')).join('\n')}\n\n`,
     url: window.location.href,
-  });
-
-  navigator.share({
-    title: `Wordle TKL | Day ${day}`,
-    text: `Wordle TKL | \n\n${guessEmoji.map(line => line.join('')).join('\n')}`,
-    url: window.location.origin,
-  })
+  };
+  console.log(sharePayload);
+  navigator.share(sharePayload);
 }
 
 function showAlert(message, duration = 1000, share = false) {
