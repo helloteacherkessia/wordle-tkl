@@ -177,8 +177,8 @@ function getActiveTiles() {
 
 function shareResults() {
   console.log({
-    title: `Wordle TKL | Day ${day}`,
-    text: `Wordle TKL | \n\n${guessEmoji.map(line => line.join('')).join('\n')}`,
+    title: `Wordle TKL`,
+    text: `Wordle TKL |  Day ${day} | \n\n${guessEmoji.map(line => line.join('')).join('\n')}\n\n`,
     url: window.location.origin,
   });
 
