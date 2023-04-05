@@ -231,7 +231,7 @@ function checkWinLose(guess, tiles) {
 
   const remainingTiles = guessGrid.querySelectorAll(":not([data-letter])")
   if (remainingTiles.length === 0) {
-    showAlert("The word is: " + targetWord.toUpperCase(), null)
+    showAlert("The word is: " + targetWord.toUpperCase(), null, true)
     stopInteraction()
   }
 }
