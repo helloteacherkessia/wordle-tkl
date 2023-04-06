@@ -10,7 +10,8 @@ const dayOffset = msOffset / 1000 / 60 / 60 / 24;
 const day = Math.floor(dayOffset) + 1;
 let targetWord = targetWords[day - 1]
 const guessEmoji = [];
-startInteraction()
+const [currentDate] = new Date().toISOString().split('T'); 
+startGame();
 
 function startInteraction() {
   document.addEventListener("click", handleMouseClick)
@@ -30,7 +31,6 @@ function editMode() {
 }
 
 function handleEditions(e) {
-    console.log('Target word', targetWord)
     if(e.key.match(/[a-z]/) && e.key.length === 1) {
       targetWord+= e.key
     }
@@ -78,10 +78,10 @@ function handleKeyPress(e) {
     return
   }
 
-  if (e.key === ";") {
-    editMode()
-    return
-  }
+  // if (e.key === ";") {
+  //   editMode()
+  //   return
+  // }
 
   if (e.key.match(/^[a-z]$/)) {
     pressKey(e.key)
@@ -107,7 +107,7 @@ function deleteKey() {
   delete lastTile.dataset.letter
 }
 
-function submitGuess() {
+function submitGuess(retroactive = false) {
   const activeTiles = [...getActiveTiles()]
   if (activeTiles.length !== WORD_LENGTH) {
     showAlert("Not enough letters")
@@ -128,7 +128,9 @@ function submitGuess() {
   guessEmoji.push([])
   stopInteraction()
   activeTiles.forEach((...params) => flipTile(...params, guess))
-  console.log(guessEmoji)
+  if(!retroactive) {
+    updateGuess(guess)
+  }
 }
 
 function flipTile(tile, index, array, guess) {
@@ -175,14 +177,28 @@ function getActiveTiles() {
   return guessGrid.querySelectorAll('[data-state="active"]')
 }
 
+function getNextFiveTiles() {
+  return [...guessGrid.querySelectorAll('.tile:not([data-state="active"])')].slice(0,5)
+}
+
+function shareText() {
+  return `Wordle TKL |  Day ${day} | \n\n${guessEmoji.map(line => line.join('')).join('\n')}\n\n`
+}
+
 function shareResults() {
   const sharePayload = {
     title: `Wordle TKL`,
-    text: `Wordle TKL |  Day ${day} | \n\n${guessEmoji.map(line => line.join('')).join('\n')}\n\n`,
+    text: shareText(),
     url: window.location.href,
   };
-  console.log(sharePayload);
+
   navigator.share(sharePayload);
+}
+
+function copyResults() {
+  navigator.clipboard.writeText(shareText());
+
+  showAlert("Copied to the clipboard")
 }
 
 function showAlert(message, duration = 1000, share = false) {
@@ -195,7 +211,13 @@ function showAlert(message, duration = 1000, share = false) {
       const shareButton = document.createElement("button");
       shareButton.innerText = "Share 🔗" 
       shareButton.addEventListener('click', shareResults);
+
+      const copyButton = document.createElement("button");
+      copyButton.innerText = "Or copy to clipboard 📋" 
+      copyButton.addEventListener('click', copyResults);
+
       alert.append(shareButton);
+      alert.append(copyButton)
   }
 
   if (duration == null) return
@@ -223,6 +245,7 @@ function shakeTiles(tiles) {
 
 function checkWinLose(guess, tiles) {
   if (guess === targetWord) {
+    endGame("win");
     showAlert("You Win", null, true)
     danceTiles(tiles)
     stopInteraction()
@@ -230,8 +253,9 @@ function checkWinLose(guess, tiles) {
   }
 
   const remainingTiles = guessGrid.querySelectorAll(":not([data-letter])")
-  if (remainingTiles.length === 0) {
+  if (remainingTiles.length === 0) {    
     showAlert("The word is: " + targetWord.toUpperCase(), null, true)
+    endGame("lose")
     stopInteraction()
   }
 }
@@ -249,4 +273,73 @@ function danceTiles(tiles) {
       )
     }, (index * DANCE_ANIMATION_DURATION) / 5)
   })
+}
+
+function startGame() {
+    let game = localStorage.getItem("savedGame");
+    if(!game) game = initGameStorage();
+    game = JSON.parse(game);
+    if(game?.date !== currentDate) game = initGameStorage();
+
+    if(game.guesses.length) {
+      populateStoragedGuesses(game.guesses)
+    }
+
+    startInteraction()
+}
+
+function initGameStorage() {
+  localStorage.setItem("savedGame", JSON.stringify(
+    { 
+      date: currentDate, 
+      guesses: [], 
+      wrongKeys: [], 
+      winState: {
+        isGameEnded: false,
+        isGameWon: false,
+      } 
+    }
+  ))
+
+
+  return localStorage.getItem("savedGame")
+}
+
+function updateGuess(guess) {
+  const game = JSON.parse(localStorage.getItem("savedGame"))
+  game.guesses.push(guess)
+  
+  localStorage.setItem("savedGame", JSON.stringify(game));
+}
+
+
+function populateStoragedGuesses(guesses) {
+  guesses.forEach(async (guess, index) => {
+    await sleep((FLIP_ANIMATION_DURATION * 6 * index) / 2).then(() => {
+      [...guess].forEach(key => pressKey(key))
+      submitGuess(true)
+    })
+  })
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function endGame(status) {
+  console.log("Finishing game")
+  const winState = {
+    isGameEnded: true,
+    isGameWon: status === "win"
+  }
+
+  const game = JSON.parse(localStorage.getItem("savedGame"))
+  game.winState = { ...winState }
+  
+  localStorage.setItem("savedGame", JSON.stringify(game))
+}
+
+function isGameEnded() {
+  const game = JSON.parse(localStorage.getItem("savedGame"))
+  return game.winState.isGameEnded
 }
