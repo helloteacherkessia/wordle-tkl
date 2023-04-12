@@ -281,7 +281,7 @@ function startGame() {
     game = JSON.parse(game);
     if(game?.date !== currentDate) game = initGameStorage();
 
-    if(game.guesses.length) {
+    if(game?.guesses?.length) {
       populateStoragedGuesses(game.guesses)
     }
 
