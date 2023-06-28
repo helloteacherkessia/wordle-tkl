@@ -9,6 +9,10 @@ const msOffset = Date.now() - offsetFromDate
 const dayOffset = msOffset / 1000 / 60 / 60 / 24;
 const day = Math.floor(dayOffset) + 1;
 let targetWord = targetWords[day - 1]
+if(!targetWord) {
+  showAlert('New guesses under construction');
+  return localStorage.setItem("savedGame", JSON.stringify({}))
+} 
 const guessEmoji = [];
 const [currentDate] = new Date().toISOString().split('T'); 
 startGame();
