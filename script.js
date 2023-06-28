@@ -4,14 +4,15 @@ const DANCE_ANIMATION_DURATION = 500
 const keyboard = document.querySelector("[data-keyboard]")
 const alertContainer = document.querySelector("[data-alert-container]")
 const guessGrid = document.querySelector("[data-guess-grid]")
-const offsetFromDate = new Date(2023, 3, 3)
+const offsetFromDate = new Date(2023, 3, 4)
 const msOffset = Date.now() - offsetFromDate
 const dayOffset = msOffset / 1000 / 60 / 60 / 24;
 const day = Math.floor(dayOffset) + 1;
 let targetWord = targetWords[day - 1]
 if(!targetWord) {
   showAlert('New guesses under construction');
-  return localStorage.setItem("savedGame", JSON.stringify({}))
+  localStorage.setItem("savedGame", JSON.stringify({}))
+  stopInteraction();
 } 
 const guessEmoji = [];
 const [currentDate] = new Date().toISOString().split('T'); 
