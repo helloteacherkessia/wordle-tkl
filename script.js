@@ -9,6 +9,28 @@ const msOffset = Date.now() - offsetFromDate
 const dayOffset = msOffset / 1000 / 60 / 60 / 24;
 const day = Math.floor(dayOffset) + 1;
 let targetWord = targetWords[day - 1]
+
+
+
+const dataAtual = new Date();
+// Erro 13/07/2023
+const dataReferencia = new Date("2023-07-13T03:00:00Z");
+if (
+  dataAtual.getFullYear() === dataReferencia.getFullYear() &&
+  dataAtual.getMonth() === dataReferencia.getMonth() &&
+  dataAtual.getDate() === dataReferencia.getDate() &&
+  dataAtual.getHours() >= 15
+) {
+  const game = JSON.parse(localStorage.getItem("savedGame"));
+  const errorRepared = !!+localStorage.getItem("repared");
+  console.log(game.winState.isGameEnded, game.guesses.length > 0, !errorRepared)
+  if((game.winState.isGameEnded || game.guesses.length > 0) && !errorRepared) {
+    alert("We're sorry about the bad 'energy' today. We're restarting your game. Try again!");
+    localStorage.setItem("savedGame", JSON.stringify({}))
+    localStorage.setItem("repared", "1");
+  }
+}
+
 if(!targetWord) {
   showAlert('New guesses under construction');
   localStorage.setItem("savedGame", JSON.stringify({}))
@@ -281,6 +303,7 @@ function danceTiles(tiles) {
 }
 
 function startGame() {
+    console.log("Starting game")
     let game = localStorage.getItem("savedGame");
     if(!game) game = initGameStorage();
     game = JSON.parse(game);
