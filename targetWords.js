@@ -99,7 +99,6 @@ const targetWords = [
   "style",
   "skill",
   "truth",
-  "energy",
   "error",
   "steal",
   "habit",
