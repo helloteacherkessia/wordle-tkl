@@ -1,4 +1,5 @@
 const targetWords = [
+  "wait",
   "still",
   "climb",
   "known",

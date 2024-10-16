@@ -1,35 +1,24 @@
-const WORD_LENGTH = 5
 const FLIP_ANIMATION_DURATION = 500
 const DANCE_ANIMATION_DURATION = 500
 const keyboard = document.querySelector("[data-keyboard]")
 const alertContainer = document.querySelector("[data-alert-container]")
 const guessGrid = document.querySelector("[data-guess-grid]")
-const offsetFromDate = new Date(2024, 0, 21)
+const offsetFromDate = new Date(2024, 9, 16)
 const msOffset = Date.now() - offsetFromDate
 const dayOffset = msOffset / 1000 / 60 / 60 / 24;
 const day = Math.floor(dayOffset) + 1;
 let targetWord = targetWords[day - 1]
+const WORD_LENGTH = targetWord.length;
+const MAX_ATTEMPTS = 6;
 
-
-
-const dataAtual = new Date();
-// Erro 13/07/2023
-const dataReferencia = new Date("2023-07-13T03:00:00Z");
-if (
-  dataAtual.getFullYear() === dataReferencia.getFullYear() &&
-  dataAtual.getMonth() === dataReferencia.getMonth() &&
-  dataAtual.getDate() === dataReferencia.getDate() &&
-  dataAtual.getHours() >= 15
-) {
-  const game = JSON.parse(localStorage.getItem("savedGame"));
-  const errorRepared = !!+localStorage.getItem("repared");
-  console.log(game.winState.isGameEnded, game.guesses.length > 0, !errorRepared)
-  if((game.winState.isGameEnded || game.guesses.length > 0) && !errorRepared) {
-    alert("We're sorry about the bad 'energy' today. We're restarting your game. Try again!");
-    localStorage.setItem("savedGame", JSON.stringify({}))
-    localStorage.setItem("repared", "1");
-  }
+for (let i = 0; i < WORD_LENGTH * MAX_ATTEMPTS; i++) {
+  const tile = document.createElement("div")
+  tile.classList.add("tile");
+  guessGrid.append(tile);
 }
+
+console.log(guessGrid)
+guessGrid.style.gridTemplateColumns = `repeat(${WORD_LENGTH}, 4em)`;
 
 if(!targetWord) {
   showAlert('New guesses under construction');
@@ -146,17 +135,50 @@ function submitGuess(retroactive = false) {
     return word + tile.dataset.letter
   }, "")
 
-  if (!dictionary.includes(guess)) {
-    showAlert("Not in word list")
-    shakeTiles(activeTiles)
-    return
+  checkWordExists(guess, activeTiles, retroactive)
+}
+
+function checkWordExists(word, activeTiles, retroactive) {
+  if (retroactive) {
+    flipActiveTiles(activeTiles, word, false)
+
+    return;
   }
 
+  if (wordAlreadyGuessed(word)) {
+    flipActiveTiles(activeTiles, word, true)
+
+    return;
+  }
+
+  axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`).then(({data}) => {
+    if (!Array.isArray(data)) {
+      showAlert("Not in word list")
+      shakeTiles(activeTiles)
+      return
+    }
+
+    flipActiveTiles(activeTiles, word, true);
+    updateGuessMetadata(data)
+  })
+}
+function wordAlreadyGuessed(guess) {
+  const game = JSON.parse(localStorage.getItem("savedGame"))
+  return game.guesses.includes(guess)
+}
+
+function metadataAlreadySetted(word) {
+  const game = JSON.parse(localStorage.getItem("savedGame"))
+  return game.guessesMetadata.map( m => m.word).includes(word)
+}
+
+function flipActiveTiles(activeTiles, word, update = false) {
   guessEmoji.push([])
   stopInteraction()
-  activeTiles.forEach((...params) => flipTile(...params, guess))
-  if(!retroactive) {
-    updateGuess(guess)
+  activeTiles.forEach((...params) => flipTile(...params, word))
+
+  if (update) {
+    updateGuess(word)
   }
 }
 
@@ -233,6 +255,23 @@ function showAlert(message, duration = 1000, share = false) {
   alert.textContent = message
   alert.classList.add("alert")
   alertContainer.prepend(alert)
+  let game = JSON.parse(localStorage.getItem("savedGame"));
+  for(const metadata of game.guessesMetadata) {
+    if (metadata.audio) {
+      const audio = document.createElement("audio");
+      const source = document.createElement("source");
+      const span = document.createElement("span");
+      audio.controls = true;
+      source.src = metadata.audio;
+      source.type = "audio/mpeg"
+      span.innerHTML = `${metadata.word} <small><i>${metadata.phonetic}</i></small>`;
+      span.style.marginTop = "3%";
+      span.style.color= "black"
+      audio.append(source);
+      alert.append(span)
+      alert.append(audio)
+    }
+  }
 
   if(share) {
       const shareButton = document.createElement("button");
@@ -272,18 +311,20 @@ function shakeTiles(tiles) {
 
 function checkWinLose(guess, tiles) {
   if (guess === targetWord) {
-    endGame("win");
-    showAlert("You Win", null, true)
-    danceTiles(tiles)
-    stopInteraction()
+    endGame("win", () => {
+      showAlert("You Win 🥳🥳 : "+ targetWord.toUpperCase(), null, true)
+      danceTiles(tiles)
+      stopInteraction()
+    });
     return
   }
 
   const remainingTiles = guessGrid.querySelectorAll(":not([data-letter])")
   if (remainingTiles.length === 0) {    
-    showAlert("The word is: " + targetWord.toUpperCase(), null, true)
-    endGame("lose")
-    stopInteraction()
+    endGame("lose", () => {
+      showAlert("You lost 🥲🥲 : " + targetWord.toUpperCase(), null, true)
+      stopInteraction()
+    });
   }
 }
 
@@ -320,7 +361,8 @@ function initGameStorage() {
   localStorage.setItem("savedGame", JSON.stringify(
     { 
       date: currentDate, 
-      guesses: [], 
+      guesses: [],
+      guessesMetadata: [],
       wrongKeys: [], 
       winState: {
         isGameEnded: false,
@@ -333,13 +375,27 @@ function initGameStorage() {
   return localStorage.getItem("savedGame")
 }
 
-function updateGuess(guess) {
+function updateGuessMetadata(data, unshift = false) {
+  const [wordInfo] = data;
+  metadata = {
+    word: wordInfo. word,
+    phonetic: wordInfo.phonetic,
+    audio: wordInfo.phonetics?.[0].audio,
+  };
   const game = JSON.parse(localStorage.getItem("savedGame"))
-  game.guesses.push(guess)
-  
+  if (!unshift) {
+    game.guessesMetadata.push(metadata)
+  } else {
+    game.guessesMetadata.unshift(metadata)
+  }
   localStorage.setItem("savedGame", JSON.stringify(game));
 }
 
+function updateGuess(guess) {
+  const game = JSON.parse(localStorage.getItem("savedGame"))
+  game.guesses.push(guess)
+  localStorage.setItem("savedGame", JSON.stringify(game));
+}
 
 function populateStoragedGuesses(guesses) {
   guesses.forEach(async (guess, index) => {
@@ -354,17 +410,30 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function endGame(status) {
+function endGame(status, callback) {
   console.log("Finishing game")
   const winState = {
     isGameEnded: true,
     isGameWon: status === "win"
   }
 
-  const game = JSON.parse(localStorage.getItem("savedGame"))
-  game.winState = { ...winState }
-  
-  localStorage.setItem("savedGame", JSON.stringify(game))
+  if (!winState.isGameWon && !metadataAlreadySetted(targetWord)) {
+    axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${targetWord}`).then( ({data}) => {
+      updateGuessMetadata(data, true);
+      const game = JSON.parse(localStorage.getItem("savedGame"))
+      game.winState = { ...winState }
+      
+      localStorage.setItem("savedGame", JSON.stringify(game))
+      callback();
+      
+    });
+  } else {
+    const game = JSON.parse(localStorage.getItem("savedGame"))
+    game.winState = { ...winState }
+    
+    localStorage.setItem("savedGame", JSON.stringify(game))
+    callback();
+  }
 }
 
 function isGameEnded() {
