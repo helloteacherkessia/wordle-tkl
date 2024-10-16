@@ -145,14 +145,25 @@ function checkWordExists(word, activeTiles, retroactive) {
     return;
   }
 
-  if (wordAlreadyGuessed(word)) {
-    flipActiveTiles(activeTiles, word, true)
+  const isGuessed = wordAlreadyGuessed(word)
+  if (isGuessed.guessed) {
+    if (isGuessed.from == "error") {
+      showAlert("Not in word list")
+      shakeTiles(activeTiles)
+    } else {
+      flipActiveTiles(activeTiles, word, true)
+    }
 
     return;
   }
 
-  axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`).then(({data}) => {
+  axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`).then((response) => {
+    const data = response.data
     if (!Array.isArray(data)) {
+      console.log({
+        status: 200,
+        response
+      })
       showAlert("Not in word list")
       shakeTiles(activeTiles)
       return
@@ -160,11 +171,35 @@ function checkWordExists(word, activeTiles, retroactive) {
 
     flipActiveTiles(activeTiles, word, true);
     updateGuessMetadata(data)
+  }).catch((response) => {
+    console.log({
+      status: 400,
+      response
+    })
+    apiRequestErrorWord(word)
+    showAlert("Not in word list")
+    
+    shakeTiles(activeTiles)
+
+    return
   })
 }
 function wordAlreadyGuessed(guess) {
   const game = JSON.parse(localStorage.getItem("savedGame"))
-  return game.guesses.includes(guess)
+  const data = {
+    guessed: false,
+    from: null
+  } 
+  if (game.guesses.includes(guess)) {
+    data.guessed = true;
+    data.from = "guess";
+  } 
+  if (game.apiRequestErrorWords.includes(guess)) {
+    data.guessed = true;
+    data.from = "error"
+  }
+
+  return data;
 }
 
 function metadataAlreadySetted(word) {
@@ -252,26 +287,33 @@ function copyResults() {
 
 function showAlert(message, duration = 1000, share = false) {
   const alert = document.createElement("div")
-  alert.textContent = message
   alert.classList.add("alert")
-  alertContainer.prepend(alert)
   let game = JSON.parse(localStorage.getItem("savedGame"));
-  for(const metadata of game.guessesMetadata) {
-    if (metadata.audio) {
-      const audio = document.createElement("audio");
-      const source = document.createElement("source");
-      const span = document.createElement("span");
-      audio.controls = true;
-      source.src = metadata.audio;
-      source.type = "audio/mpeg"
-      span.innerHTML = `${metadata.word} <small><i>${metadata.phonetic}</i></small>`;
-      span.style.marginTop = "3%";
-      span.style.color= "black"
-      audio.append(source);
-      alert.append(span)
-      alert.append(audio)
+  if (isGameEnded()) {
+    const h1 = document.createElement("h1")
+    h1.textContent = message
+    alert.prepend(h1)
+    for(const metadata of game.guessesMetadata) {
+      if (metadata.audio) {
+        const audio = document.createElement("audio");
+        const source = document.createElement("source");
+        const span = document.createElement("h2");
+        audio.controls = true;
+        source.src = metadata.audio;
+        source.type = "audio/mpeg"
+        span.innerHTML = `${metadata.word} <small><i>${metadata.phonetic}</i></small>`;
+        span.style.marginTop = "3%";
+        span.style.color= "black"
+        audio.append(source);
+        alert.append(span)
+        alert.append(audio)
+      }
     }
+  } else {
+    alert.textContent = message
+    alert.classList.add("alert")
   }
+  alertContainer.prepend(alert)
 
   if(share) {
       const shareButton = document.createElement("button");
@@ -363,6 +405,7 @@ function initGameStorage() {
       date: currentDate, 
       guesses: [],
       guessesMetadata: [],
+      apiRequestErrorWords: [],
       wrongKeys: [], 
       winState: {
         isGameEnded: false,
@@ -380,7 +423,7 @@ function updateGuessMetadata(data, unshift = false) {
   metadata = {
     word: wordInfo. word,
     phonetic: wordInfo.phonetic,
-    audio: wordInfo.phonetics?.[0].audio,
+    audio: wordInfo?.phonetics?.[0]?.audio,
   };
   const game = JSON.parse(localStorage.getItem("savedGame"))
   if (!unshift) {
@@ -394,6 +437,12 @@ function updateGuessMetadata(data, unshift = false) {
 function updateGuess(guess) {
   const game = JSON.parse(localStorage.getItem("savedGame"))
   game.guesses.push(guess)
+  localStorage.setItem("savedGame", JSON.stringify(game));
+}
+
+function apiRequestErrorWord(guess) {
+  const game = JSON.parse(localStorage.getItem("savedGame"))
+  game.apiRequestErrorWords.push(guess)
   localStorage.setItem("savedGame", JSON.stringify(game));
 }
 

@@ -211,6 +211,13 @@ body {
   color:rgb(255, 255, 255)
 }
 
+.alert > * {
+  text-align: center;
+}
+
+.alert:last-child audio {
+  margin-bottom: 5%;
+}
 .alert:last-child {
   margin-bottom: 0;
 }
