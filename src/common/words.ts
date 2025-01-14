@@ -1,697 +1,697 @@
 export function getWordOfTheDay() {
-  const now = new Date()
-  const start = new Date(2024, 10, 7)
-  const diff = Number(now) - Number(start)
-  let day = Math.floor(diff / (1000 * 60 * 60 * 24))
+  const now = new Date();
+  const start = new Date(2025, 0, 12);
+  const diff = Number(now) - Number(start);
+  let day = Math.floor(diff / (1000 * 60 * 60 * 24));
   while (day > targetWords.length) {
-    day -= targetWords.length
+    day -= targetWords.length;
   }
-  return targetWords[day]
+  return targetWords[day];
 }
 
 const targetWords = [
   {
-      "word": "cushion",
-      "hint": "soft pillow for chairs"
+    word: "time",
+    hint: "hours, minutes, seconds",
   },
   {
-      "word": "tree",
-      "hint": "big plant with leaves"
+    word: "milk",
+    hint: "white drink",
   },
   {
-      "word": "brain",
-      "hint": "part of the head for thinking"
+    word: "night",
+    hint: "time when it’s dark",
   },
   {
-      "word": "grape",
-      "hint": "small, round fruit"
+    word: "dream",
+    hint: "thoughts during sleep",
   },
   {
-      "word": "picture",
-      "hint": "image or photo"
+    word: "pigeon",
+    hint: "bird often found in cities",
   },
   {
-      "word": "pepper",
-      "hint": "spicy seasoning"
+    word: "violin",
+    hint: "string instrument played with a bow",
   },
   {
-      "word": "wolf",
-      "hint": "wild animal related to dogs"
+    word: "channel",
+    hint: "tv or radio station",
   },
   {
-      "word": "glass",
-      "hint": "clear material or cup"
+    word: "wind",
+    hint: "moving air",
   },
   {
-      "word": "juice",
-      "hint": "drink from fruit"
+    word: "pocket",
+    hint: "small pouch in clothes",
   },
   {
-      "word": "blank",
-      "hint": "empty, with nothing on it"
+    word: "people",
+    hint: "more than one person",
   },
   {
-      "word": "bread",
-      "hint": "food made from flour"
+    word: "brain",
+    hint: "part of the head for thinking",
   },
   {
-      "word": "snow",
-      "hint": "cold, white ice from the sky"
+    word: "explain",
+    hint: "to make something clear",
   },
   {
-      "word": "jump",
-      "hint": "to go up fast"
+    word: "vitamin",
+    hint: "nutrient for health",
   },
   {
-      "word": "train",
-      "hint": "long transport on tracks"
+    word: "market",
+    hint: "place to buy and sell goods",
   },
   {
-      "word": "doctor",
-      "hint": "person who treats the sick"
+    word: "star",
+    hint: "bright light in space",
   },
   {
-      "word": "lantern",
-      "hint": "light you carry outside"
+    word: "stick",
+    hint: "thin piece of wood",
   },
   {
-      "word": "pizza",
-      "hint": "food with cheese and toppings"
+    word: "smell",
+    hint: "sense of the nose",
   },
   {
-      "word": "book",
-      "hint": "pages to read"
+    word: "throne",
+    hint: "seat for a king or queen",
   },
   {
-      "word": "guard",
-      "hint": "person who protects"
+    word: "coffee",
+    hint: "hot drink",
   },
   {
-      "word": "rock",
-      "hint": "hard thing on the ground"
+    word: "country",
+    hint: "area with its own government",
   },
   {
-      "word": "lemon",
-      "hint": "yellow sour fruit"
+    word: "sugar",
+    hint: "sweet white powder",
   },
   {
-      "word": "bird",
-      "hint": "animal that flies"
+    word: "brick",
+    hint: "block used to build",
   },
   {
-      "word": "butter",
-      "hint": "yellow spread for bread"
+    word: "hill",
+    hint: "small mountain",
   },
   {
-      "word": "popcorn",
-      "hint": "snack made from heated corn"
+    word: "shark",
+    hint: "large fish with sharp teeth",
   },
   {
-      "word": "cloud",
-      "hint": "white in the sky, brings rain"
+    word: "ticket",
+    hint: "paper to enter a place or event",
   },
   {
-      "word": "marker",
-      "hint": "tool for drawing or writing"
+    word: "clock",
+    hint: "tells the time",
   },
   {
-      "word": "violin",
-      "hint": "string instrument played with a bow"
+    word: "grape",
+    hint: "small, round fruit",
   },
   {
-      "word": "channel",
-      "hint": "tv or radio station"
+    word: "balloon",
+    hint: "colorful item that floats with air",
   },
   {
-      "word": "candy",
-      "hint": "sweet treat"
+    word: "bridge",
+    hint: "structure to cross over water",
   },
   {
-      "word": "kitchen",
-      "hint": "room for cooking"
+    word: "fish",
+    hint: "animal in the water",
   },
   {
-      "word": "play",
-      "hint": "have fun"
+    word: "road",
+    hint: "path for cars",
   },
   {
-      "word": "biscuit",
-      "hint": "small, baked food, often sweet"
+    word: "knife",
+    hint: "sharp tool for cutting",
   },
   {
-      "word": "fire",
-      "hint": "hot flames"
+    word: "honey",
+    hint: "sweet food from bees",
   },
   {
-      "word": "head",
-      "hint": "top part of the body"
+    word: "paper",
+    hint: "thin material to write on",
   },
   {
-      "word": "house",
-      "hint": "place to live"
+    word: "jump",
+    hint: "to go up fast",
   },
   {
-      "word": "gold",
-      "hint": "yellow precious metal"
+    word: "table",
+    hint: "furniture from the kitchen",
   },
   {
-      "word": "wind",
-      "hint": "moving air"
+    word: "door",
+    hint: "entrance to a room",
   },
   {
-      "word": "smell",
-      "hint": "sense of the nose"
+    word: "stone",
+    hint: "small rock",
   },
   {
-      "word": "rain",
-      "hint": "water from the sky"
+    word: "earth",
+    hint: "our planet",
   },
   {
-      "word": "weather",
-      "hint": "condition outside, like sunny or rainy"
+    word: "four",
+    hint: "number after three",
   },
   {
-      "word": "music",
-      "hint": "sounds we listen to"
+    word: "wolf",
+    hint: "wild animal related to dogs",
   },
   {
-      "word": "love",
-      "hint": "feeling of caring"
+    word: "mouse",
+    hint: "small animal or computer tool",
   },
   {
-      "word": "ticket",
-      "hint": "paper to enter a place or event"
+    word: "spider",
+    hint: "animal with eight legs",
   },
   {
-      "word": "star",
-      "hint": "bright light in space"
+    word: "moon",
+    hint: "light in the night sky",
   },
   {
-      "word": "wheel",
-      "hint": "round part of a car"
+    word: "bottle",
+    hint: "container for liquids",
   },
   {
-      "word": "trouble",
-      "hint": "difficulty or problem"
+    word: "sheep",
+    hint: "animal with wool",
   },
   {
-      "word": "editor",
-      "hint": "person who prepares content for publishing"
+    word: "hand",
+    hint: "part of your arm",
   },
   {
-      "word": "cold",
-      "hint": "not warm"
+    word: "lizard",
+    hint: "reptile with a long tail",
   },
   {
-      "word": "wine",
-      "hint": "drink from grapes"
+    word: "picture",
+    hint: "image or photo",
   },
   {
-      "word": "carpet",
-      "hint": "soft floor covering"
+    word: "light",
+    hint: "bright, helps us see",
   },
   {
-      "word": "thunder",
-      "hint": "loud sound during a storm"
+    word: "kitchen",
+    hint: "room for cooking",
   },
   {
-      "word": "food",
-      "hint": "what we eat"
+    word: "travel",
+    hint: "to go from place to place",
   },
   {
-      "word": "throne",
-      "hint": "seat for a king or queen"
+    word: "juice",
+    hint: "drink from fruit",
   },
   {
-      "word": "mouse",
-      "hint": "small animal or computer tool"
+    word: "popcorn",
+    hint: "snack made from heated corn",
   },
   {
-      "word": "hill",
-      "hint": "small mountain"
+    word: "lantern",
+    hint: "light you carry outside",
   },
   {
-      "word": "nurse",
-      "hint": "helps doctors and patients"
+    word: "grill",
+    hint: "cook over fire",
   },
   {
-      "word": "four",
-      "hint": "number after three"
+    word: "rainbow",
+    hint: "colorful arc in the sky after rain",
   },
   {
-      "word": "earth",
-      "hint": "our planet"
+    word: "floor",
+    hint: "bottom part of a room",
   },
   {
-      "word": "hand",
-      "hint": "part of your arm"
+    word: "paint",
+    hint: "color for walls or art",
   },
   {
-      "word": "button",
-      "hint": "small item for fastening clothes"
+    word: "blue",
+    hint: "color of the sky",
   },
   {
-      "word": "daily",
-      "hint": "happens every day"
+    word: "lemon",
+    hint: "yellow sour fruit",
   },
   {
-      "word": "animal",
-      "hint": "living being, not a plant"
+    word: "calm",
+    hint: "relaxed, not worried",
   },
   {
-      "word": "travel",
-      "hint": "to go from place to place"
+    word: "monster",
+    hint: "scary creature in stories",
   },
   {
-      "word": "garden",
-      "hint": "place with plants and flowers"
+    word: "warm",
+    hint: "a little hot",
   },
   {
-      "word": "vitamin",
-      "hint": "nutrient for health"
+    word: "guard",
+    hint: "person who protects",
   },
   {
-      "word": "plane",
-      "hint": "transport that flies"
+    word: "fortune",
+    hint: "wealth or good luck",
   },
   {
-      "word": "time",
-      "hint": "hours, minutes, seconds"
+    word: "glass",
+    hint: "clear material or cup",
   },
   {
-      "word": "milk",
-      "hint": "white drink"
+    word: "head",
+    hint: "top part of the body",
   },
   {
-      "word": "night",
-      "hint": "time when it’s dark"
+    word: "candle",
+    hint: "wax with a flame",
   },
   {
-      "word": "dream",
-      "hint": "thoughts during sleep"
+    word: "gravity",
+    hint: "force that pulls us down to earth",
   },
   {
-      "word": "plant",
-      "hint": "green living thing"
+    word: "march",
+    hint: "third month of the year",
   },
   {
-      "word": "road",
-      "hint": "path for cars"
+    word: "history",
+    hint: "study of past events",
   },
   {
-      "word": "people",
-      "hint": "more than one person"
+    word: "fishing",
+    hint: "catching fish as a hobby or job",
   },
   {
-      "word": "paper",
-      "hint": "thin material to write on"
+    word: "stars",
+    hint: "bright lights in the sky at night",
   },
   {
-      "word": "floor",
-      "hint": "bottom part of a room"
+    word: "green",
+    hint: "color of grass",
   },
   {
-      "word": "balance",
-      "hint": "to stay steady"
+    word: "button",
+    hint: "small item for fastening clothes",
   },
   {
-      "word": "fortune",
-      "hint": "large amount of money or good luck"
+    word: "pizza",
+    hint: "food with cheese and toppings",
   },
   {
-      "word": "knife",
-      "hint": "sharp tool for cutting"
+    word: "pepper",
+    hint: "spicy seasoning",
   },
   {
-      "word": "fortune",
-      "hint": "wealth or good luck"
+    word: "chair",
+    hint: "furniture for sitting",
   },
   {
-      "word": "chain",
-      "hint": "linked metal loops"
+    word: "alive",
+    hint: "living, not dead",
   },
   {
-      "word": "lizard",
-      "hint": "reptile with a long tail"
+    word: "trouble",
+    hint: "difficulty or problem",
   },
   {
-      "word": "cash",
-      "hint": "paper money"
+    word: "tunnel",
+    hint: "underground passage",
   },
   {
-      "word": "warm",
-      "hint": "a little hot"
+    word: "water",
+    hint: "clear liquid we drink",
   },
   {
-      "word": "apple",
-      "hint": "red or green fruit"
+    word: "snow",
+    hint: "cold, white ice from the sky",
   },
   {
-      "word": "desert",
-      "hint": "hot, dry land"
+    word: "house",
+    hint: "place to live",
   },
   {
-      "word": "blue",
-      "hint": "color of the sky"
+    word: "weather",
+    hint: "condition outside, like sunny or rainy",
   },
   {
-      "word": "angel",
-      "hint": "heavenly being"
+    word: "train",
+    hint: "long transport on tracks",
   },
   {
-      "word": "citrus",
-      "hint": "fruit like orange or lemon"
+    word: "shirt",
+    hint: "clothing for the top of your body",
   },
   {
-      "word": "table",
-      "hint": "furniture from the kitchen"
+    word: "rock",
+    hint: "hard thing on the ground",
   },
   {
-      "word": "moon",
-      "hint": "light in the night sky"
+    word: "woods",
+    hint: "small forest area",
   },
   {
-      "word": "bridge",
-      "hint": "structure to cross over water"
+    word: "cook",
+    hint: "to prepare food with heat",
   },
   {
-      "word": "fossil",
-      "hint": "old remains of plants or animals"
+    word: "desert",
+    hint: "hot, dry land",
   },
   {
-      "word": "smooth",
-      "hint": "soft and even surface"
+    word: "chain",
+    hint: "linked metal loops",
   },
   {
-      "word": "stone",
-      "hint": "small rock"
+    word: "tree",
+    hint: "big plant with leaves",
   },
   {
-      "word": "beach",
-      "hint": "sandy place by the sea"
+    word: "angel",
+    hint: "heavenly being",
   },
   {
-      "word": "grill",
-      "hint": "cook over fire"
+    word: "cushion",
+    hint: "soft pillow for chairs",
   },
   {
-      "word": "water",
-      "hint": "clear liquid we drink"
+    word: "black",
+    hint: "darkest color",
   },
   {
-      "word": "stars",
-      "hint": "bright lights in the sky at night"
+    word: "wheel",
+    hint: "round part of a car",
   },
   {
-      "word": "spoon",
-      "hint": "tool to eat soup"
+    word: "dessert",
+    hint: "sweet treat after a meal",
   },
   {
-      "word": "light",
-      "hint": "bright, helps us see"
+    word: "ship",
+    hint: "boat on the sea",
   },
   {
-      "word": "deep",
-      "hint": "far down or far in"
+    word: "blank",
+    hint: "empty, with nothing on it",
   },
   {
-      "word": "dessert",
-      "hint": "sweet treat after a meal"
+    word: "cloud",
+    hint: "white in the sky, brings rain",
   },
   {
-      "word": "stadium",
-      "hint": "large place for sports or concerts"
+    word: "hanging",
+    hint: "suspended in the air",
   },
   {
-      "word": "explain",
-      "hint": "to make something clear"
+    word: "jacket",
+    hint: "clothing for cold weather",
   },
   {
-      "word": "jungle",
-      "hint": "dense forest with many trees"
+    word: "love",
+    hint: "feeling of caring",
   },
   {
-      "word": "bell",
-      "hint": "makes a ringing sound"
+    word: "animal",
+    hint: "living being, not a plant",
   },
   {
-      "word": "history",
-      "hint": "study of past events"
+    word: "palace",
+    hint: "large, grand home, often for royalty",
   },
   {
-      "word": "storm",
-      "hint": "strong rain and wind"
+    word: "fossil",
+    hint: "old remains of plants or animals",
   },
   {
-      "word": "pigeon",
-      "hint": "bird often found in cities"
+    word: "cartoon",
+    hint: "animated TV show or movie",
   },
   {
-      "word": "pocket",
-      "hint": "small pouch in clothes"
+    word: "daily",
+    hint: "happens every day",
   },
   {
-      "word": "bite",
-      "hint": "use teeth to cut"
+    word: "editor",
+    hint: "person who prepares content for publishing",
   },
   {
-      "word": "calm",
-      "hint": "relaxed, not worried"
+    word: "doctor",
+    hint: "person who treats the sick",
   },
   {
-      "word": "balloon",
-      "hint": "colorful item that floats with air"
+    word: "rain",
+    hint: "water from the sky",
   },
   {
-      "word": "coffee",
-      "hint": "hot drink"
+    word: "sand",
+    hint: "tiny grains at the beach",
   },
   {
-      "word": "ghost",
-      "hint": "spirit or soul"
+    word: "cradle",
+    hint: "bed for a baby",
   },
   {
-      "word": "smile",
-      "hint": "happy face"
+    word: "smile",
+    hint: "happy face",
   },
   {
-      "word": "cook",
-      "hint": "to prepare food with heat"
+    word: "plane",
+    hint: "transport that flies",
   },
   {
-      "word": "shirt",
-      "hint": "clothing for the top of your body"
+    word: "plant",
+    hint: "green living thing",
   },
   {
-      "word": "guitars",
-      "hint": "musical instruments with strings"
+    word: "blind",
+    hint: "unable to see",
   },
   {
-      "word": "spider",
-      "hint": "animal with eight legs"
+    word: "candy",
+    hint: "sweet treat",
   },
   {
-      "word": "repair",
-      "hint": "to fix something broken"
+    word: "food",
+    hint: "what we eat",
   },
   {
-      "word": "island",
-      "hint": "land with water all around"
+    word: "village",
+    hint: "small community or town",
   },
   {
-      "word": "stick",
-      "hint": "thin piece of wood"
+    word: "bread",
+    hint: "food made from flour",
   },
   {
-      "word": "sheep",
-      "hint": "animal with wool"
+    word: "fire",
+    hint: "hot flames",
   },
   {
-      "word": "clock",
-      "hint": "tells the time"
+    word: "grass",
+    hint: "green plant on the ground",
   },
   {
-      "word": "chair",
-      "hint": "furniture for sitting"
+    word: "jail",
+    hint: "place for criminals",
   },
   {
-      "word": "march",
-      "hint": "third month of the year"
+    word: "cookie",
+    hint: "sweet, baked snack",
   },
   {
-      "word": "fishing",
-      "hint": "catching fish as a hobby or job"
+    word: "silence",
+    hint: "complete quiet, no sound",
   },
   {
-      "word": "jacket",
-      "hint": "clothing for cold weather"
+    word: "apple",
+    hint: "red or green fruit",
   },
   {
-      "word": "village",
-      "hint": "small community or town"
+    word: "balance",
+    hint: "to stay steady",
   },
   {
-      "word": "palace",
-      "hint": "large, grand home, often for royalty"
+    word: "bell",
+    hint: "makes a ringing sound",
   },
   {
-      "word": "message",
-      "hint": "written or spoken information for someone"
+    word: "thunder",
+    hint: "loud sound during a storm",
   },
   {
-      "word": "door",
-      "hint": "entrance to a room"
+    word: "play",
+    hint: "have fun",
   },
   {
-      "word": "bottle",
-      "hint": "container for liquids"
+    word: "jungle",
+    hint: "dense forest with many trees",
   },
   {
-      "word": "goblin",
-      "hint": "small, mischievous creature in stories"
+    word: "package",
+    hint: "box or item sent in the mail",
   },
   {
-      "word": "grass",
-      "hint": "green plant on the ground"
+    word: "cold",
+    hint: "not warm",
   },
   {
-      "word": "blind",
-      "hint": "unable to see"
+    word: "ghost",
+    hint: "spirit or soul",
   },
   {
-      "word": "candle",
-      "hint": "wax with a flame"
+    word: "spoon",
+    hint: "tool to eat soup",
   },
   {
-      "word": "ship",
-      "hint": "boat on the sea"
+    word: "book",
+    hint: "pages to read",
   },
   {
-      "word": "peach",
-      "hint": "soft, juicy fruit"
+    word: "balloon",
+    hint: "colorful item that floats with air",
   },
   {
-      "word": "hanging",
-      "hint": "suspended in the air"
+    word: "fruit",
+    hint: "sweet food from plants",
   },
   {
-      "word": "fruit",
-      "hint": "sweet food from plants"
+    word: "north",
+    hint: "direction opposite of south",
   },
   {
-      "word": "woods",
-      "hint": "small forest area"
+    word: "stadium",
+    hint: "large place for sports or concerts",
   },
   {
-      "word": "sand",
-      "hint": "tiny grains at the beach"
+    word: "stature",
+    hint: "height of a person",
   },
   {
-      "word": "package",
-      "hint": "box or item sent in the mail"
+    word: "citrus",
+    hint: "fruit like orange or lemon",
   },
   {
-      "word": "faith",
-      "hint": "strong belief"
+    word: "music",
+    hint: "sounds we listen to",
   },
   {
-      "word": "stature",
-      "hint": "height of a person"
+    word: "nurse",
+    hint: "helps doctors and patients",
   },
   {
-      "word": "silence",
-      "hint": "complete quiet, no sound"
+    word: "island",
+    hint: "land with water all around",
   },
   {
-      "word": "green",
-      "hint": "color of grass"
+    word: "message",
+    hint: "written or spoken information for someone",
   },
   {
-      "word": "alive",
-      "hint": "living, not dead"
+    word: "smooth",
+    hint: "soft and even surface",
   },
   {
-      "word": "cookie",
-      "hint": "sweet, baked snack"
+    word: "marker",
+    hint: "tool for drawing or writing",
   },
   {
-      "word": "storage",
-      "hint": "place to keep things"
+    word: "beach",
+    hint: "sandy place by the sea",
   },
   {
-      "word": "north",
-      "hint": "direction opposite of south"
+    word: "garden",
+    hint: "place with plants and flowers",
   },
   {
-      "word": "tunnel",
-      "hint": "underground passage"
+    word: "faith",
+    hint: "strong belief",
   },
   {
-      "word": "jail",
-      "hint": "place for criminals"
+    word: "bird",
+    hint: "animal that flies",
   },
   {
-      "word": "black",
-      "hint": "darkest color"
+    word: "goblin",
+    hint: "small, mischievous creature in stories",
   },
   {
-      "word": "cartoon",
-      "hint": "animated TV show or movie"
+    word: "butter",
+    hint: "yellow spread for bread",
   },
   {
-      "word": "fish",
-      "hint": "animal in the water"
+    word: "bite",
+    hint: "use teeth to cut",
   },
   {
-      "word": "sugar",
-      "hint": "sweet white powder"
+    word: "storage",
+    hint: "place to keep things",
   },
   {
-      "word": "paint",
-      "hint": "color for walls or art"
+    word: "carpet",
+    hint: "soft floor covering",
   },
   {
-      "word": "market",
-      "hint": "place to buy and sell goods"
+    word: "repair",
+    hint: "to fix something broken",
   },
   {
-      "word": "honey",
-      "hint": "sweet food from bees"
+    word: "guitars",
+    hint: "musical instruments with strings",
   },
   {
-      "word": "shark",
-      "hint": "large fish with sharp teeth"
+    word: "peach",
+    hint: "soft, juicy fruit",
   },
   {
-      "word": "country",
-      "hint": "area with its own government"
+    word: "storm",
+    hint: "strong rain and wind",
   },
   {
-      "word": "cradle",
-      "hint": "bed for a baby"
+    word: "fortune",
+    hint: "large amount of money or good luck",
   },
   {
-      "word": "monster",
-      "hint": "scary creature in stories"
+    word: "cash",
+    hint: "paper money",
   },
   {
-      "word": "brick",
-      "hint": "block used to build"
+    word: "shoes",
+    hint: "what you wear on your feet",
   },
   {
-      "word": "gravity",
-      "hint": "force that pulls us down to earth"
+    word: "gold",
+    hint: "yellow precious metal",
   },
   {
-      "word": "rainbow",
-      "hint": "colorful arc in the sky after rain"
+    word: "wine",
+    hint: "drink from grapes",
   },
   {
-      "word": "shoes",
-      "hint": "what you wear on your feet"
+    word: "deep",
+    hint: "far down or far in",
   },
   {
-      "word": "balloon",
-      "hint": "colorful item that floats with air"
-  }
-]
+    word: "biscuit",
+    hint: "small, baked food, often sweet",
+  },
+];

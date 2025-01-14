@@ -41,6 +41,7 @@ onUnmounted(() => {
 })
 
 function onKey(key: string) {
+  console.log("OnKey pressed", key)
   if (!allowInput) return
   if (/^[a-zA-Z]$/.test(key)) {
     fillTile(key.toLowerCase())
@@ -61,7 +62,6 @@ function fillTile(letter: string) {
 }
 
 function clearTile() {
-  console.log(currentRow.value)
   for (const tile of [...currentRow.value].reverse()) {
     if (tile.letter) {
       tile.letter = ''
@@ -79,7 +79,9 @@ async function completeRow(fromInitialState = false) {
     return;
   }
   const guess = currentRow.value.map((tile) => tile.letter).join('')
+  allowInput = false
   const word = await WordService.inWordList(guess); 
+  allowInput = true
   if (!word.inWordList) {
     shake()
     showMessage(`Not in word list`)
